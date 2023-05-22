@@ -40,3 +40,27 @@ export async function postLogin(req, res) {
         return res.sendStatus(500);
     }
 }
+
+export async function getMe(req, res){
+    const {email}=res.locals.tokenData;
+
+    try {
+        const emailSearch=await db.query("SELECT * FROM users WHERE email=$1", [email]);
+        if(!emailSearch.rowCount) return res.sendStatus(401);
+        const urlSearch=await db.query(`SELECT * FROM links WHERE "userId"=$1`, [emailSearch.rows[0].id]);
+        return res.send({
+            id: emailSearch.rows[0].id,
+            name: emailSearch.rows[0].name,
+            visitCount: urlSearch.rows.reduce((acc, cur)=>acc+cur.timesUsed,0),
+            shortenedUrls: urlSearch.rows.map(obj=>({
+                id: obj.id,
+                shortUrl: obj.urlShorted,
+                url: obj.urlOriginal,
+                visitCount: obj.timesUsed
+            }))
+        });
+    } catch (error) {
+        console.error(error);
+        return res.sendStatus(500);
+    }
+}
