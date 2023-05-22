@@ -26,15 +26,15 @@ export async function postRegister(req, res) {
     }
 }
 
-export async function postLogin(req, res){
-    const { email, password }=req.body;
+export async function postLogin(req, res) {
+    const { email, password } = req.body;
 
     try {
-        const emailSearch=await db.query(`SELECT * FROM users WHERE email=$1`, [email]);
-        if(emailSearch.rowCount!==1) return res.sendStatus(404);
-        if(bcrypt.compareSync(password, emailSearch.rows[0].password)===false) return res.sendStatus(401);
-        const token=jwt.sign({email, password: emailSearch.rows[0].password}, process.env.JWT_SECRET, {expiresIn: "24h"});
-        return res.send({token});
+        const emailSearch = await db.query(`SELECT * FROM users WHERE email=$1`, [email]);
+        if (emailSearch.rowCount !== 1) return res.sendStatus(404);
+        if (bcrypt.compareSync(password, emailSearch.rows[0].password) === false) return res.sendStatus(401);
+        const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "24h" });
+        return res.send({ token });
     } catch (error) {
         console.error(error);
         return res.sendStatus(500);

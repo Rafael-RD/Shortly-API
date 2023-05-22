@@ -2,6 +2,7 @@ import { Router } from "express";
 import validationMiddleware from "../middlewares/validation.middleware.js";
 import { postLogin, postRegister } from "../controllers/users.controller.js";
 import { loginSchema, registerSchema } from "../schemas/users.schema.js";
+import validateTokenMiddleware from "../middlewares/validateToken.middleware.js";
 
 
 const usersRouter=Router();
@@ -11,7 +12,7 @@ usersRouter.post("/signin", validationMiddleware(loginSchema), postLogin);
 usersRouter.get("/ranking");
 
 //autenticated
-usersRouter.get("/users/me");
+usersRouter.get("/users/me", validateTokenMiddleware);
 
 
 export default usersRouter;
