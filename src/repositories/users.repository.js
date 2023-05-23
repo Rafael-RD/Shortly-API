@@ -11,10 +11,6 @@ export function createUser({name, email, password}){
     `, [name, email, password]);
 }
 
-export function urlsByUserId({id}){
-    return db.query(`SELECT * FROM links WHERE "userId"=$1`, [id]);
-}
-
 export function usersRanking(){
     return db.query(`
     SELECT users.id, users.name, COUNT(links) AS "linksCount", SUM(links."timesUsed") AS "visitCount"

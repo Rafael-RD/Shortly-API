@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { createUser, urlsByUserId, userByEmail, usersRanking } from "../repositories/users.repository.js";
+import { createUser, userByEmail, usersRanking } from "../repositories/users.repository.js";
+import { urlsByUserId } from "../repositories/links.repository.js";
 
 dotenv.config();
 
