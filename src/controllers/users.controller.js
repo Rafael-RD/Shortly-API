@@ -67,6 +67,7 @@ export async function getRanking(req, res) {
 
     try {
         const search=await usersRanking();
+        return res.send(search);
     } catch (error) {
         console.error(error);
         return res.sendStatus(500);
